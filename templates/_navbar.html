@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark p-1">
+  <a class="navbar-brand" href="/">RimuStuff</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/about">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/contact">Contact</a>
+      </li>
+    </ul>
+
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    
+      {%- if current_user.is_authenticated +%}
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            {%- if is_admin() +%}
+              <a class="nav-link dropdown-toggle color-admin" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false" data-bs-display="static">{{ current_user.username }}</a>
+            {%- elif is_moderator() %}
+            <a class="nav-link dropdown-toggle color-moderator" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false" data-bs-display="static">{{ current_user.username }}</a>
+            {%- else %}
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false" data-bs-display="static">{{ current_user.username }}</a>
+            {%- endif %}
+            <div class="dropdown-menu dropdown-menu0 dropdown-menu-end dropdown-menu-lg-start" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/profile">Profile</a>
+              <a class="dropdown-item" href="/settings">Settings</a>
+              <a class="dropdown-item" href="#">Switch Account</a>
+              {%- if is_admin() +%}
+                <div class="dropdown-divider"></div>
+                <a href="/internal/settings" class="dropdown-item text-danger">Server Settings</a>
+              {%- endif %}
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+          </li>
+        </ul>
+      {%- else %}
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+          </li>
+        </ul>
+      {%- endif %}
+    </div>
+</nav>

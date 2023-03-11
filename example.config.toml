@@ -1,0 +1,6 @@
+NAME = "RimuStuff"
+
+# Make sure to edit this file
+SECRETS = "test"
+
+BASE_VERSION = "0.0.2"

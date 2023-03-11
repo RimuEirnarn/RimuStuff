@@ -1,0 +1,44 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RimuStuff | {% block title %}{% endblock %}</title>
+  <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/static/main/app.css">
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+
+  <script src="/static/bootstrap/js/bootstrap.min.js" defer></script>
+  <script src="/static/main/app.js" defer></script>
+</head>
+
+<nav class="container">
+  <h1>Rimustuff</h1>
+  <ul>
+    {% if g.user %}
+    <li><span>{{ g.user['username'] }}</span>
+    <li><a href="/logout">Log Out</a>
+      {% else %}
+    <li><a href="/register">Register</a>
+    <li><a href="/login">Log In</a>
+      {% endif %}
+    <li><a href="/filemanager" class="noanchor">Files</a></li>
+    <li><a href="/about" class="noanchor">About</a></li>
+    <li><a href="/projects" class="noanchor">Projects</a></li>
+    <li><a href="/terminal" class="noanchor disabled">Terminal view</a></li>
+  </ul>
+</nav>
+
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% with messages = get_flashed_messages(true) %}
+  {% if messages %}
+  <ul class=flashes>
+    {% for category, message in messages %}
+    <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+  </ul>{% endif %}{% endwith %}{% block content %}{% endblock %}
+</section>

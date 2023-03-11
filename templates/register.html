@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% include '_header.html' %}
+  <link rel="stylesheet" href="/static/main/login.css">
+</head>
+
+<body>
+  {% include '_navbar.html' %}
+
+  <main class="form-signin w-100 m-auto">
+    <form method="POST" action="/register">
+      {% include 'flash.html' %}
+      {{ form.csrf_token }}{% if form.csrf_token.errors %}
+      <div class="warning">You have submitted an invalid CSRF token</div>{% endif %}
+      <h1 class="h3 mb-3 fw-normal">Register</h1>
+
+      <div class="form-floating">
+        {{ form.username(class="form-control form-signin-start", placeholder="Username") }}
+        {{ form.username.label(class='form-label') }}
+      </div>
+      <div class="form-floating">
+        {{ form.password(class="form-control form-signin0", placeholder="Password") }}
+        {{ form.password.label(class='form-label') }}
+      </div>
+      <div class="form-floating">
+        {{ form.confirm_password(class="form-control form-signin-end", placeholder="Confirm Password") }}
+        {{ form.confirm_password.label(class='form-label') }}
+      </div>
+      <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+
+    </form>
+  </main>
+</body>
+
+</html>

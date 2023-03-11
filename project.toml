@@ -1,0 +1,6 @@
+NAME = "RimuStuff"
+
+SECRETS = _
+
+VERSION = _
+BASE_VERSION = "0.0.2"

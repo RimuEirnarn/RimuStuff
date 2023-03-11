@@ -1,0 +1,21 @@
+body {
+  /*-height: 75rem;*/
+  padding-top: 4.5rem;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.mr-auto {
+    margin-right: auto;
+}
+
+.ndropdown_nav {
+  right: 0 !important;
+}
+
+.dropdown-menu0 {
+  right: 0 !important;
+  left: auto !important;
+}
