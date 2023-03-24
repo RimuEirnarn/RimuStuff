@@ -1,16 +1,25 @@
 """User Model"""
 from flask_login import UserMixin
+
 try:
     from ..errors import ResourceNotFound
     from ...database.signature import op
-    from ..database_loader import table_namespace
+    from ..database_loader import table
+    from . import BaseModel
 except ImportError:
     from app.errors import ResourceNotFound
-    from app.database_loader import table_namespace
+    from app.database_loader import table
+    from app.model import BaseModel
     from database.signature import op
 
 
-class UserModel(table_namespace('users')):
+class UserModel(BaseModel, table=table('users')):  # type: ignore
+    """User Model"""
+    username: str
+    password: str
+    picture: str
+    groups: str
+
     """User Model"""
     @classmethod
     def load(cls, user_id: str):
@@ -18,12 +27,20 @@ class UserModel(table_namespace('users')):
         user = cls._table.select_one(  # type: ignore
             {"username": op == user_id})
         if user:
-            return UserModel(**user)
+            return UserModel(user)
         raise ResourceNotFound(f"Resource for {user_id} is not found")
+
+    @staticmethod
+    def find(user_id: str):
+        return UserModel.load(user_id)
+
+    @staticmethod
+    def all():
+        return UserModel._table.select()
 
 
 class UserInterface(UserMixin):  # type: ignore
-    """User Model"""
+    """User Model Interface"""
 
     def __init__(self, __user: UserModel | str) -> None:
         super().__init__()
@@ -46,4 +63,4 @@ class UserInterface(UserMixin):  # type: ignore
 
     def get_id(self) -> str:
         """Get user id"""
-        return self._data[0]
+        return self._data.username

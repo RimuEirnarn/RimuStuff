@@ -4,14 +4,14 @@ from sqlite3 import OperationalError
 from typing import Any, Iterable, NamedTuple, Optional, Type
 
 from ._utils import WithCursor, check_iter, check_one
-from .column import Column
+from .column import BuilderColumn, Column
 from .errors import TableRemovedError, UnexpectedResultError
 from .locals import SQLITEPYTYPES
 from .query_builder import (build_update_data, combine_keyvals,
                             extract_signature, extract_single_column,
                             fetch_columns, format_paramable)
 from .signature import op
-from .typings import Condition, Data, Orders, Queries, Query, _MasterQuery
+from .typings import Condition, Data, Orders, Queries, Query, _MasterQuery, TypicalNamedTuple
 
 # Let's add a little bit of 'black' magic here.
 
@@ -271,7 +271,7 @@ values ({', '.join(val for _,val in converged.items())})"
             return False
         return True
 
-    def get_namespace(self) -> Type[NamedTuple]:
+    def get_namespace(self) -> Type[TypicalNamedTuple]:
         """Generate or return pre-existed namespace/table."""
         if self._ns.get(self._table, None):
             return self._ns[self._table]
@@ -311,9 +311,15 @@ values ({', '.join(val for _,val in converged.items())})"
         """Is table deleted"""
         return self._deleted
 
-    def add_column(self, column: Column):
+    @property
+    def name(self):
+        """Table name"""
+        return self._table
+
+    def add_column(self, column: Column | BuilderColumn):
         """Add column to table"""
         sql = self._parent.sql
+        column = column.to_column() if isinstance(column, BuilderColumn) else column
         if column.primary or column.unique:
             raise OperationalError(
                 "New column cannot have primary or unique constraint")

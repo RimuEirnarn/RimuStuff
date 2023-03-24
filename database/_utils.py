@@ -2,12 +2,13 @@
 
 # This module must not import anything from this package except errors.
 
+from inspect import get_annotations
 from re import Pattern
 from re import compile as re_compile
 from re import escape as re_escape
 from sqlite3 import Cursor, connect
 from string import punctuation
-from typing import Any, Iterable
+from typing import Any, Iterable, Type
 
 from .errors import SecurityError
 
@@ -83,3 +84,14 @@ class WithCursor(Cursor):
 
     def __repr__(self) -> str:
         return type(self).__name__
+
+
+def future_class_var_isdefined(type_: Type[Any], future_attr: str):
+    """Is a future class var defined?"""
+    annotations = get_annotations(type_)
+    if future_attr in annotations:
+        try:
+            getattr(type_, future_attr)
+        except AttributeError:
+            return True
+    return False

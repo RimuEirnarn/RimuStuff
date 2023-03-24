@@ -50,7 +50,7 @@ def role_required(*roles: str, code=403):
             if current_user is None:
                 return abort(code)
             # if user is admin, we should always return func()
-            user_roles: list[str] = current_user.groups.split(
+            user_roles: list[str] = current_user.groups.split(  # type: ignore
                 ',')  # type: ignore
             if get_admin() in user_roles:
                 return func(*args, **kwargs)
