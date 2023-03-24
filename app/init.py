@@ -10,14 +10,13 @@ from flask_wtf import FlaskForm
 from werkzeug.security import check_password_hash, generate_password_hash
 from wtforms import PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired, EqualTo, Length
+from sqlite_database import Database, op
 
 try:
-    from database import Database, op
     from app.flask_utils import get_admin, get_moderator, is_invalid_username, role_required, admin_only
     from app.utils import load as toml_load
     from app.utils import usage_cache
 except ImportError:
-    from ..database import Database, op
     from .flask_utils import get_admin, get_moderator, is_invalid_username, \
         role_required, admin_only
     from .utils import load as toml_load

@@ -1,16 +1,15 @@
 """User Model"""
 from flask_login import UserMixin
+from sqlite_database import op
 
 try:
     from ..errors import ResourceNotFound
-    from ...database.signature import op
     from ..database_loader import table
     from . import BaseModel
 except ImportError:
     from app.errors import ResourceNotFound
     from app.database_loader import table
     from app.model import BaseModel
-    from database.signature import op
 
 
 class UserModel(BaseModel, table=table('users')):  # type: ignore

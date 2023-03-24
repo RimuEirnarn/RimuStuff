@@ -4,6 +4,7 @@ from flask_login import login_required, login_user, logout_user
 from flask import render_template, request, flash, redirect, url_for, abort
 from markupsafe import escape
 from werkzeug.security import check_password_hash, generate_password_hash
+from sqlite_database.signature import op
 
 
 try:
@@ -12,14 +13,12 @@ try:
     from app.database_loader import table
     from app.model.user import UserInterface
     from app.flask_utils import is_invalid_username, role_required, admin_only
-    from database.signature import op
 except ImportError:
     from . import Route
     from .forms import LoginForm, RegisterForm
     from .model.user import UserInterface
     from .flask_utils import is_invalid_username, role_required, admin_only
     from .database_loader import table
-    from ..database.signature import op
 
 users = table('users')
 groups = table('groups')

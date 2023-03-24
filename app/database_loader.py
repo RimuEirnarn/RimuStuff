@@ -1,8 +1,5 @@
 """Database Loader"""
-try:
-    from ..database import Database
-except ImportError:
-    from database import Database
+from sqlite_database import Database
 
 database = Database("main.db")
 

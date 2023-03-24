@@ -1,6 +1,7 @@
 """Application"""
 from flask import Flask
 from flask_login import LoginManager, current_user
+from sqlite_database import op
 
 from .model.user import UserInterface
 from .skeleton.user import UserSkeleton
@@ -9,11 +10,10 @@ from .flask_utils import get_admin, get_moderator
 from .utils import load as toml_load
 from .database_loader import database
 
+
 try:
-    from ..database.signature import op
     from ..core.router import Router
 except ImportError:
-    from database import op
     from core.router import Router
 
 login_manager = LoginManager()

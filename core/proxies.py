@@ -2,11 +2,7 @@
 
 from typing import Any
 
-
-try:
-    from ..database._utils import AttrDict
-except ImportError:
-    from database._utils import AttrDict
+from sqlite_database._utils import AttrDict
 
 _null = object()
 

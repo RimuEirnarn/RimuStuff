@@ -3,16 +3,14 @@
 from inspect import get_annotations
 from typing import Protocol
 
+from sqlite_database.table import Table
+from sqlite_database.typings import TypicalNamedTuple
+
 
 try:
     from ...core.proxies import AttrDict
-    from ...database.table import Table
-    from ...database.typings import TypicalNamedTuple
 except ImportError:
     from core.proxies import AttrDict
-    from database.table import Table
-    from database.typings import TypicalNamedTuple
-
 
 class AnyModel(Protocol):
     """Model Protocol"""
