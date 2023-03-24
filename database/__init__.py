@@ -5,11 +5,12 @@ from typing import Iterable, Optional
 
 from ._utils import (WithCursor, check_iter, check_one, dict_factory, null,
                      sqlite_multithread_check, AttrDict)
-from .column import Column
+from .column import BuilderColumn, Column
 from .locals import this
 from .query_builder import extract_table_creations
 from .signature import op
 from .table import Table
+Columns = Iterable[Column] | Iterable[BuilderColumn]
 
 
 class Database:
@@ -40,7 +41,7 @@ class Database:
         """Create cursor"""
         return self._database.cursor(WithCursor)  # type: ignore
 
-    def create_table(self, table: str, columns: Iterable[Column]):
+    def create_table(self, table: str, columns: Columns):
         """Create table
 
         Args:
@@ -51,6 +52,8 @@ class Database:
             Table: Newly created table
         """
         check_one(table)
+        columns = (column.to_column() if isinstance(
+            column, BuilderColumn) else column for column in columns)
         tbquery = extract_table_creations(columns)
         query = f"create table {table} ({tbquery})"
 
@@ -83,7 +86,7 @@ class Database:
         self._table_instances[table] = this_table
         return this_table
 
-    def reset_table(self, table: str, columns: Iterable[Column]) -> Table:
+    def reset_table(self, table: str, columns: Columns) -> Table:
         """Reset existing table with new, this rewrote entire table than altering it."""
         try:
             self.table(table)
