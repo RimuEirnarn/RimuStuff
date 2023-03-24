@@ -7,6 +7,8 @@ from types import SimpleNamespace
 
 from pytest import fixture, raises
 
+
+from ..database.column import BuilderColumn
 from ..database import Column, Database
 from ..database.signature import op
 from ..database.errors import TableRemovedError
@@ -64,7 +66,7 @@ USER_UNEW = [{
 }]
 
 
-def setup_database(database):
+def setup_database(database: Database):
     """setup database"""
     users = database.create_table("users", [
         Column("id", "integer", unique=True, primary=True),
@@ -75,6 +77,33 @@ def setup_database(database):
     groups = database.create_table("groups", [
         Column("id", "integer", primary=True),
         Column("name", "text")
+    ])
+    groups.insert_many(GROUP_BASE)
+    users.insert_many(USER_BASE)
+
+
+def setup_database_builder(database: Database):
+    """Setup database with builder pattern for column"""
+    users = database.create_table("users", [
+        BuilderColumn()
+        .integer('id')
+        .unique()
+        .primary(),
+        BuilderColumn()
+        .text("username"),
+        BuilderColumn()
+        .text("role")
+        .default("user"),
+        BuilderColumn()
+        .integer('gid')
+        .foreign("groups/id")
+    ])
+    groups = database.create_table("groups", [
+        BuilderColumn()
+        .integer('id')
+        .primary(),
+        BuilderColumn()
+        .text('name')
     ])
     groups.insert_many(GROUP_BASE)
     users.insert_many(USER_BASE)
@@ -163,3 +192,13 @@ def test_04_finish(databasepath):
         assert save_report("05_finish", database, groups, users)
     with open(file, "w", encoding="utf-8") as xfile:
         xfile.write(pstdout.getvalue())
+
+
+def test_05_builder_pattern():
+    """Test 05 builder pattern"""
+    database = Database(":memory:")
+    setup_database_builder(database)
+    users = database.table('users')
+    groups = database.table('groups')
+    assert users.select() == USER_BASE
+    assert groups.select() == GROUP_BASE
