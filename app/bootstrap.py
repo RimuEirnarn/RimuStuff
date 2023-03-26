@@ -4,10 +4,10 @@ from warnings import warn
 from flask import Flask
 try:
     from app.utils import save_exc_groups
-    from core.typings import BootstrapFunction
+    from typings import BootstrapFunction
 except ImportError:
     from .utils import save_exc_groups
-    from ..core.typings import BootstrapFunction
+    from .typings import BootstrapFunction
 
 
 _PENDING_BOOTSTRAP: list[BootstrapFunction] = []

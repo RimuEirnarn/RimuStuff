@@ -5,12 +5,8 @@ from typing import Protocol
 
 from sqlite_database.table import Table
 from sqlite_database.typings import TypicalNamedTuple
+from future_router.proxies import AttrDict
 
-
-try:
-    from ...core.proxies import AttrDict
-except ImportError:
-    from core.proxies import AttrDict
 
 class AnyModel(Protocol):
     """Model Protocol"""

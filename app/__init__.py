@@ -2,6 +2,7 @@
 from flask import Flask
 from flask_login import LoginManager, current_user
 from sqlite_database import op
+from future_router import Router
 
 from .model.user import UserInterface
 from .skeleton.user import UserSkeleton
@@ -9,12 +10,6 @@ from .skeleton.user import UserSkeleton
 from .flask_utils import get_admin, get_moderator
 from .utils import load as toml_load
 from .database_loader import database
-
-
-try:
-    from ..core.router import Router
-except ImportError:
-    from core.router import Router
 
 login_manager = LoginManager()
 
